@@ -1,11 +1,10 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import Link from "next/link";
-import products from "../products.json";
-import { fromImageToUrl } from "../utils/urls";
+import { fromImageToUrl, API_URL } from "../utils/urls";
 import { twoDecimals } from "../utils/format";
 
-export default function Home() {
+export default function Home({ products }) {
   return (
     <div className={styles.container}>
       <Head>
@@ -30,4 +29,21 @@ export default function Home() {
       ))}
     </div>
   );
+}
+
+export async function getStaticProps() {
+  //this is Fetching the products
+  const product_res = await fetch(`${API_URL}/products/`);
+  const products = await product_res.json();
+
+  //Return the products as props
+  //effectively returning a object
+  //with the key of props
+  //and product as the value
+
+  return {
+    props: {
+      products,
+    },
+  };
 }
